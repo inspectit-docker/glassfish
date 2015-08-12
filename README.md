@@ -1,3 +1,5 @@
+[![](https://badge.imagelayers.io/inspectit/glassfish:latest.svg)](https://imagelayers.io/?images=inspectit/glassfish:latest 'Get your own badge on imagelayers.io')
+
 # GlassFish with inspectIT
 This docker image is based on the official GlassFish docker image including the inspectIT agent of the open source APM solution [www.inspectit.eu](http://www.inspectit.eu).
 This image can be used easily as a replacement for the GlassFish image, meaning you only have to change your existing Dockerfile ```FROM glassfish:latest``` to ```FROM inspectit/glassfish:latest```.
