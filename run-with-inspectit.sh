@@ -3,21 +3,18 @@
 CMR_ADDR=${INSPECTIT_CMR_ADDR:-cmr}
 CMR_PORT=${INSPECTIT_CMR_PORT:-9070}
 
-if [ "$(ls -A $INSPECTIT_CONFIG_HOME)" ]; then
-	echo "[INFO] Using existing inspectIT configuration..."
-else
-	if ([ -z $INSPECTIT_CMR_ADDR ] || [ -z $INSPECTIT_CMR_PORT ]) && ([ -z $CMR_PORT_9070_TCP_ADDR ] || [ -z $CMR_PORT_9070_TCP_PORT ]); then
-                echo "[ERROR] No inspectIT CMR configured! Please read our README"
-                exit 1
-        fi
 
-	echo "[INFO] No custom inspectIT configuration found, using default one..."
-	cp -r $INSPECTIT_CONFIG_HOME/../config/* $INSPECTIT_CONFIG_HOME
-
-	AGENT_NAME=${AGENT_NAME:-$HOSTNAME}
-	sed -i "s/^\(repository\) .*/\1 $CMR_ADDR $CMR_PORT $AGENT_NAME/" $INSPECTIT_CONFIG_HOME/inspectit-agent.cfg
-	echo "[INFO] Done. Remember to modify the configuration for your needs. You find the configuration in the mapped volume $INSPECTIT_CONFIG_HOME." 
+if ([ -z $INSPECTIT_CMR_ADDR ] || [ -z $INSPECTIT_CMR_PORT ]) && ([ -z $CMR_PORT_9070_TCP_ADDR ] || [ -z $CMR_PORT_9070_TCP_PORT ]); then
+        echo "[ERROR] No inspectIT CMR configured! Please read our README"
+        exit 1
 fi
+
+AGENT_NAME=${AGENT_NAME:-$HOSTNAME}
+RUN_SCRIPT=${GLASSFISH_HOME}/glassfish/domains/domain1/config/domain.xml
+
+sed -i -- "s/_CMR_ADDR_/$CMR_ADDR/g" $RUN_SCRIPT
+sed -i -- "s/_CMR_PORT_/$CMR_PORT/g" $RUN_SCRIPT
+sed -i -- "s/_AGENT_NAME_/$AGENT_NAME/g" $RUN_SCRIPT
 
 # Version check
 if ([[ -n $INSPECTIT_VERSION && -n $CMR_ENV_INSPECTIT_VERSION && $INSPECTIT_VERSION != $CMR_ENV_INSPECTIT_VERSION ]]); then

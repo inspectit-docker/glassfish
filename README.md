@@ -14,17 +14,17 @@ $ docker run -d --name inspectIT-CMR -p 8182:8182 -p 9070:9070 inspectit/cmr
 Now you can start a container with the following command:
 
 ```bash
-$ docker run -d --link inspectIT-CMR:cmr -v $(pwd)/config:/opt/agent/active-config inspectit/glassfish
+$ docker run -d --link inspectIT-CMR:cmr inspectit/glassfish
 ```
 
-You can now adjust the instrumentation configuration in the folder *config* for your needs. Please refer to our [documentation](https://inspectit-performance.atlassian.net/wiki/display/DOC16/Agent+Configuration) or just leave a comment.
+You can now adjust the instrumentation configuration with the inspectIT UI for your needs. Please refer to our [documentation](https://inspectit-performance.atlassian.net/wiki/display/DOC16/Agent+Configuration) or just leave a comment.
 
 ## Configuration
 ### Agent name
 By default, the inspectIT agent uses the hostname as agent name. You can set a different name setting ```AGENT_NAME```:
 
 ```bash
-$ docker run -d --link inspectIT-CMR:cmr -v $(pwd)/config:/opt/agent/active-config -e AGENT_NAME=<agent-name> inspectit/glassfish
+$ docker run -d --link inspectIT-CMR:cmr -e AGENT_NAME=<agent-name> inspectit/glassfish
 ```
 
 ### Using a custom inspectIT CMR
@@ -41,7 +41,7 @@ Currently, this image is based on the latest GlassFish image. Later, support for
 Currently, this image is based on the latest beta inspectIT release. Later, support for other versions is added.
 
 ## Build the docker image
-If you want to build the GlassFish inspectIT image yourself, checkout this repository and run 
+If you want to build the GlassFish inspectIT image yourself, checkout this repository and run
 
 ```bash
 $ docker build -t inspectit/glassfish .
