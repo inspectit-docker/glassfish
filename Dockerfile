@@ -15,7 +15,7 @@ RUN sed -i "s#\(</java-config>\)#<jvm-options>-Xbootclasspath/p:\${com\.sun\.aas
 	&& sed -i "s#\(</java-config>\)#<jvm-options>-javaagent:\${com\.sun\.aas\.instanceRoot}/lib/ext/inspectit-agent.jar</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
 	&& sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.repository=_CMR_ADDR_:_CMR_PORT_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
   && sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.agent.name=_AGENT_NAME_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
-        && sed -i "s/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler.*/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler\.\*, info\.novatec\.inspectit\.\*/" glassfish/config/osgi.properties
+        && sed -i "s/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler.*/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler\.\*, rocks\.inspectit\.\*/" glassfish/config/osgi.properties
 
 COPY run-with-inspectit.sh /run-with-inspectit.sh
 
