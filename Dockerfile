@@ -1,6 +1,6 @@
 FROM glassfish:latest
 
-ENV INSPECTIT_VERSION 1.6.8.82
+ENV INSPECTIT_VERSION 1.6.9.83
 ENV INSPECTIT_AGENT_HOME /opt/agent
 
 RUN wget https://github.com/inspectIT/inspectIT/releases/download/${INSPECTIT_VERSION}/inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -q \
