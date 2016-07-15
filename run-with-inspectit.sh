@@ -2,19 +2,18 @@
 
 CMR_ADDR=${INSPECTIT_CMR_ADDR:-cmr}
 CMR_PORT=${INSPECTIT_CMR_PORT:-9070}
-
+AGENT_NAME=${AGENT_NAME:-$HOSTNAME}
 
 if ([ -z $INSPECTIT_CMR_ADDR ] || [ -z $INSPECTIT_CMR_PORT ]) && ([ -z $CMR_PORT_9070_TCP_ADDR ] || [ -z $CMR_PORT_9070_TCP_PORT ]); then
         echo "[ERROR] No inspectIT CMR configured! Please read our README"
         exit 1
 fi
 
-AGENT_NAME=${AGENT_NAME:-$HOSTNAME}
-RUN_SCRIPT=${GLASSFISH_HOME}/glassfish/domains/domain1/config/domain.xml
-
-sed -i -- "s/_CMR_ADDR_/$CMR_ADDR/g" $RUN_SCRIPT
-sed -i -- "s/_CMR_PORT_/$CMR_PORT/g" $RUN_SCRIPT
-sed -i -- "s/_AGENT_NAME_/$AGENT_NAME/g" $RUN_SCRIPT
+# Update inspectIT options in the configuration file
+CONFIGURATION_FILE=${GLASSFISH_HOME}/glassfish/domains/domain1/config/domain.xml
+sed -i -- "s/_CMR_ADDR_/$CMR_ADDR/g" $CONFIGURATION_FILE
+sed -i -- "s/_CMR_PORT_/$CMR_PORT/g" $CONFIGURATION_FILE
+sed -i -- "s/_AGENT_NAME_/$AGENT_NAME/g" $CONFIGURATION_FILE
 
 # Version check
 if ([[ -n $INSPECTIT_VERSION && -n $CMR_ENV_INSPECTIT_VERSION && $INSPECTIT_VERSION != $CMR_ENV_INSPECTIT_VERSION ]]); then

@@ -3,20 +3,20 @@ FROM glassfish:latest
 ENV INSPECTIT_VERSION 1.6.9.83
 ENV INSPECTIT_AGENT_HOME /opt/agent
 
+# download agent and prepare
 RUN wget https://github.com/inspectIT/inspectIT/releases/download/${INSPECTIT_VERSION}/inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -q \
-      && unzip inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -d /opt \
-      && apt-get clean \
-      && rm -rf /var/lib/apt \
-      && rm -f inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip
+ && unzip inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -d /opt \
+ && apt-get clean \
+ && rm -rf /var/lib/apt \
+ && rm -f inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip
 
-RUN ln -s /opt/agent/inspectit-agent.jar glassfish/domains/domain1/lib/ext/
+# alter the configuration for the domain to include inspectIT options
+RUN sed -i "s#\(</java-config>\)#<jvm-options>-javaagent:\${INSPECTIT_AGENT_HOME}/inspectit-agent.jar</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
+ && sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.repository=_CMR_ADDR_:_CMR_PORT_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
+ && sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.agent.name=_AGENT_NAME_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
+ && sed -i "s/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler.*/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler\.\*, rocks\.inspectit\.\*/" glassfish/config/osgi.properties
 
-RUN sed -i "s#\(</java-config>\)#<jvm-options>-Xbootclasspath/p:\${com\.sun\.aas\.instanceRoot}/lib/ext/inspectit-agent\.jar</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
-	&& sed -i "s#\(</java-config>\)#<jvm-options>-javaagent:\${com\.sun\.aas\.instanceRoot}/lib/ext/inspectit-agent.jar</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
-	&& sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.repository=_CMR_ADDR_:_CMR_PORT_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
-  && sed -i "s#\(</java-config>\)#<jvm-options>-Dinspectit.agent.name=_AGENT_NAME_</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
-        && sed -i "s/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler.*/org\.netbeans\.lib\.profiler, org\.netbeans\.lib\.profiler\.\*, rocks\.inspectit\.\*/" glassfish/config/osgi.properties
-
+# copy start script
 COPY run-with-inspectit.sh /run-with-inspectit.sh
 
 CMD /run-with-inspectit.sh
