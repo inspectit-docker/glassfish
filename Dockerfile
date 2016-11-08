@@ -4,11 +4,11 @@ ENV INSPECTIT_VERSION 1.7.4.87
 ENV INSPECTIT_AGENT_HOME /opt/agent
 
 # download agent and prepare
-RUN wget https://github.com/inspectIT/inspectIT/releases/download/${INSPECTIT_VERSION}/inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -q \
- && unzip inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip -d /opt \
+RUN wget https://github.com/inspectIT/inspectIT/releases/download/${INSPECTIT_VERSION}/inspectit-agent-java6-${INSPECTIT_VERSION}.zip -q \
+ && unzip inspectit-agent-java6-${INSPECTIT_VERSION}.zip -d /opt \
  && apt-get clean \
  && rm -rf /var/lib/apt \
- && rm -f inspectit-agent-sun1.5-${INSPECTIT_VERSION}.zip
+ && rm -f inspectit-agent-java6-${INSPECTIT_VERSION}.zip
 
 # alter the configuration for the domain to include inspectIT options
 RUN sed -i "s#\(</java-config>\)#<jvm-options>-javaagent:\${INSPECTIT_AGENT_HOME}/inspectit-agent.jar</jvm-options>\1#" glassfish/domains/domain1/config/domain.xml \
