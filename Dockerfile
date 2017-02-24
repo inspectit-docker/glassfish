@@ -1,6 +1,6 @@
 FROM glassfish:latest
 
-ENV INSPECTIT_VERSION 1.7.7.90
+ENV INSPECTIT_VERSION 1.7.8.91
 ENV INSPECTIT_AGENT_HOME /opt/agent
 
 # download agent and prepare
